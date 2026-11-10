@@ -1,4 +1,4 @@
-// models/index.js
+
 
 export { default as User } from './User.js';
 export { default as UserSettings } from './UserSettings.js';

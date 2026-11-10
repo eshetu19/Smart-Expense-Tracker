@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify your email</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f5f5f5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color:#f5f5f5;padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width:560px;background-color:#ffffff;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="padding:32px 32px 16px 32px;">
+              <h1 style="margin:0;font-size:22px;font-weight:600;color:#111827;">Welcome to {{appName}}</h1>
+            </td>
+          </tr>
+          <!-- Body -->
+          <tr>
+            <td style="padding:0 32px 8px 32px;">
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Hi {{firstName}},
+              </p>
+              <p style="margin:0 0 16px 0;font-size:15px;line-height:1.6;color:#374151;">
+                Thanks for signing up as <strong>{{username}}</strong>. Please verify your email address to complete your registration.
+              </p>
+            </td>
+          </tr>
+          <!-- CTA button -->
+          <tr>
+            <td align="center" style="padding:16px 32px 24px 32px;">
+              <a href="{{verificationUrl}}" style="display:inline-block;background-color:#2563eb;color:#ffffff;font-size:15px;font-weight:600;text-decoration:none;padding:12px 32px;border-radius:6px;">
+                Verify my email
+              </a>
+            </td>
+          </tr>
+          <!-- Fallback link -->
+          <tr>
+            <td style="padding:0 32px 16px 32px;">
+              <p style="margin:0 0 8px 0;font-size:13px;line-height:1.5;color:#6b7280;">
+                If the button doesn't work, copy and paste this link into your browser:
+              </p>
+              <p style="margin:0;font-size:13px;line-height:1.5;word-break:break-all;color:#2563eb;">
+                <a href="{{verificationUrl}}" style="color:#2563eb;text-decoration:underline;">{{verificationUrl}}</a>
+              </p>
+            </td>
+          </tr>
+          <!-- Warning -->
+          <tr>
+            <td style="padding:16px 32px 32px 32px;border-top:1px solid #f3f4f6;">
+              <p style="margin:0;font-size:13px;line-height:1.5;color:#6b7280;">
+                This link expires in <strong>{{expiryHours}} hours</strong>.
+              </p>
+              <p style="margin:8px 0 0 0;font-size:13px;line-height:1.5;color:#6b7280;">
+                If you didn't create this account, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+        </table>
+        <!-- Footer -->
+        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width:560px;">
+          <tr>
+            <td style="padding:24px 16px 0 16px;text-align:center;">
+              <p style="margin:0;font-size:12px;color:#9ca3af;">
+                Sent by {{appName}}
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

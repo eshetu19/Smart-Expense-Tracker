@@ -40,7 +40,7 @@ const existsByPhoneNumber = async (phoneNumber) => {
   return count > 0;
 };
 
-const createData=(data)=>User.create(data)
+const create=(data)=>User.create(data)
 
 const save=(user)=>User.save();
     
@@ -86,7 +86,7 @@ export default {
   existsByUsername,
   existsByPhoneNumber,
   findByIdWithPassword,
-  createData,
+  create,
   save,
   updateById,
   updateLastLogin,

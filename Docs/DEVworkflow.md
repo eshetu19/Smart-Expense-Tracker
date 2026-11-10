@@ -5,8 +5,103 @@
 - repository
 - service
 - controller
+
 - route
 - test
+
+
+
+
+
+
+
+set TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWYyZmNlOTk5ODVlZjY0YmE0MDA0NGMiLCJlbWFpbCI6InRlc3QxNEBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoidGVzdHVzZXIxNCIsImlhdCI6MTc5NDMxODg3NSwiZXhwIjoxNzk0MzE5Nzc1fQ.AH-As8ZnwbqdLK5v3LAvSFmS4qefoaF_KprM7mMF-cQ
+
+
+
+
+echo %TOKEN%
+echo %ACCOUNT_ID%
+echo %CATEGORY_ID%
+
+
+
+curl -X POST http://localhost:5000/api/v1/transactions -H "Content-Type: application/json" -H "Authorization: Bearer %TOKEN%" -d "{\"transactionType\":\"EXPENSE\",\"amountCents\":5000,\"title\":\"Coffee purchase\",\"description\":\"Morning coffee\",\"fromAccount\":\"%ACCOUNT_ID%\",\"categoryId\":\"%CATEGORY_ID%\",\"transactionDate\":\"2026-11-10T08:00:00.000Z\"}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2YWYyZmNlOTk5ODVlZjY0YmE0MDA0NGMiLCJlbWFpbCI6InRlc3QxNEBleGFtcGxlLmNvbSIsInVzZXJuYW1lIjoidGVzdHVzZXIxNCIsImlhdCI6MTc5NDMwOTM2MiwiZXhwIjoxNzk0MzEwMjYyfQ.r2IS-S9elPoGqGcRtCtHAxR8u8NZ4EhJ9TyX7KDYwzM
+
+
+
+
+
+curl -X POST http://localhost:5000/api/v1/auth/login -H "Content-Type: application/json" -d "{\"email\":\"test14@example.com\",\"password\":\"TestPass123!\"}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

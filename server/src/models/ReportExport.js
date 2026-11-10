@@ -1,6 +1,6 @@
 
 import mongoose from 'mongoose';
-import { REPORT_TYPES, EXPORT_FORMATS } from '../config/constants.js';
+import { REPORT_TYPES, EXPORT_FORMATS,REPORT_STATUSES } from '../config/constants.js';
 
 const reportExportSchema = new mongoose.Schema(
   {
@@ -45,14 +45,14 @@ const reportExportSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: ['PENDING', 'PROCESSING', 'COMPLETED', 'FAILED'],
+      enum: Object.values(REPORT_STATUSES),
       default: 'COMPLETED',
     },
 
     expiresAt: {
       type: Date,
       default: null,
-      index: true,
+      
     },
   },
   {
@@ -62,7 +62,6 @@ const reportExportSchema = new mongoose.Schema(
 );
 
 reportExportSchema.index({ user: 1, exportedAt: -1 });   
-reportExportSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
 const ReportExport = mongoose.model('ReportExport', reportExportSchema);
 export default ReportExport;

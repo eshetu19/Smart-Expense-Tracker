@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 
-import {ACCOUNT_TYPES,DEFAULTS} from '../config/constants'
+import {ACCOUNT_TYPES,DEFAULTS} from '../config/constants.js'
 const accountSchema=new mongoose.Schema(
     {
      user:{
@@ -21,13 +21,13 @@ const accountSchema=new mongoose.Schema(
         required:[true,'Account type is required'],
         
      },
-     openingBalance:{
+     openingBalanceCents:{
         type:Number,
         required:true,
         default:0,
         min:[0,'Opening balance cannot be negative']
      },
-     currentBalance:{
+     currentBalanceCents:{
         type:Number,
         required:true,
         default:0
@@ -75,12 +75,12 @@ accountSchema.index({user:1,name:1},{unique:true})
 accountSchema.index({user:1,isActive:1})
 
 accountSchema.virtual('openingBalance').get(function(){
-   return this.openingBalance/100
+   return this.openingBalanceCents/100
 })
 
 accountSchema.virtual('currentBalance').get(function(){
-   return this.currentBalance/100
+   return this.currentBalanceCents/100
 })
 
-const Accounts=mongoose.model('Accounts',accountSchema)
-export default Accounts;
+const Account=mongoose.model('Account',accountSchema)
+export default Account;

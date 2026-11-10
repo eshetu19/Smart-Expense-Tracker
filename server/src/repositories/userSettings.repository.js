@@ -22,7 +22,7 @@ const updateByUser=(userId,data)=>
         {new:true,runValidators:true}
     )
 
-const upSertByUser=(userId,data)=>
+const upsertByUser=(userId,data)=>
     UserSettings.findOneAndUpdate(
         {user:userId},{$set:data},{new:true,upsert:true,runValidators:true
             ,setDefaultsOnInsert: true
@@ -30,7 +30,7 @@ const upSertByUser=(userId,data)=>
 
     )
 
-const deeleteByUser=(userId)=>UserSettings.findOneAndDelete(userId)
+const deleteByUser=(userId)=>UserSettings.findOneAndDelete(userId)
 
 
 export default{

@@ -2,7 +2,10 @@
 import userRepository from '../repositories/user.repository.js';
 import tokenRepository from '../repositories/token.repository.js';
 import userSettingsService from './userSettings.service.js';
+import fileService from './file.service.js';
+import logger from '../utils/logger.js';
 import ApiError from '../utils/ApiError.js';
+
 
 const getProfile = async (userId) => {
   const user = await userRepository.findById(userId);
@@ -18,6 +21,7 @@ const getProfileWithSettings = async (userId) => {
 
   return { user, settings };
 };
+
 
 const updateProfile = async (userId, data) => {
   const user = await userRepository.findById(userId);
@@ -46,7 +50,25 @@ const updateProfileImage = async (userId, imagePath) => {
   const user = await userRepository.findById(userId);
   if (!user) throw ApiError.notFound('User not found');
 
-  return await userRepository.updateById(userId, { profileImage: imagePath });
+  const oldImagePath = user.profileImage;
+
+  const updated = await userRepository.updateById(userId, {
+    profileImage: imagePath,
+  });
+
+  if (oldImagePath && oldImagePath !== imagePath) {
+    try {
+      await fileService.deleteFile(oldImagePath);
+    } catch (err) {
+      logger.warn('Failed to delete old avatar file', {
+        userId: String(userId),
+        oldImagePath,
+        error: err.message,
+      });
+    }
+  }
+
+  return updated;
 };
 
 const changePassword = async (userId, currentPassword, newPassword) => {
@@ -79,6 +101,7 @@ const deactivateAccount = async (userId) => {
 
   return { message: 'Account deactivated' };
 };
+
 
 export default {
   getProfile,

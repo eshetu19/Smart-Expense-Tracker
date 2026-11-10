@@ -62,6 +62,7 @@ POST   /api/v1/auth/reset-password      reset password
 POST  /api/v1/auth/verify-email         verify email adress
 POST   /api/v1/auth/resend-verification-email
 
+
                  1. register endpoint
 creates a new user account after successful registration the user can login to access the application. no authentication is required anyone should be able to create account.
 

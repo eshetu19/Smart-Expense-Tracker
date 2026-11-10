@@ -3,7 +3,7 @@ import userSettingsRepository from '../repositories/userSettings.repository.js';
 import tokenRepository from '../repositories/token.repository.js';
 import tokenService from './token.service.js';
 import userSettingsService from './userSettings.service.js';
-//import emailService from './email.service.js';   
+import emailService from './email.service.js';   
 import ApiError from '../utils/ApiError.js';
 import config from '../config/index.js';
 import { sanitizeFilter } from 'mongoose';
@@ -16,22 +16,28 @@ const register = async (data , deviceInfo) =>{
         throw ApiError.conflict('Username already taken')
     }
 
-    const user = await userRepository.create({
-        username: data.username,
-        email: data.email,
-        password: data.password,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        phoneNumber: data.phoneNumber || null
+  const createData = {
+  username: data.username,
+  email: data.email,
+  password: data.password,
+  firstName: data.firstName,
+  lastName: data.lastName,
+};
 
-    });
-    await userSettingsService.getByUser(user._id);
+if (data.phoneNumber) {
+  createData.phoneNumber = data.phoneNumber;
+}
+
+const user = await userRepository.create(createData);
+
+await userSettingsService.getByUser(user._id);
+     await userSettingsService.getByUser(user._id);
 
     const {rawToken:verificationToken} = await 
     tokenService.createEmailVerificationToken(user._id)
 
     const verificationUrl=`${config.app.clientUrl}/verify-email?token=${verificationToken}`
-    // await emailService.sendVerificationEmail(user, verificationUrl);
+    await emailService.sendVerificationEmail(user, verificationUrl);
 
     const accessToken = tokenService.signAccessToken(user)
     const { rawToken: refreshToken, expiresAt: refreshTokenExpiresAt } =
@@ -46,7 +52,7 @@ const register = async (data , deviceInfo) =>{
     };
 };
 
-//Login
+
 
 const login = async (email , password , deviceInfo={}) =>{
     const user = await userRepository.findByEmailWithPassword(email)
@@ -137,7 +143,7 @@ const forgotPassword = async (email) =>{
   const { rawToken } = await tokenService.createPasswordResetToken(user._id);
   const resetUrl = `${config.app.clientUrl}/reset-password?token=${rawToken}`;
    
-   // await emailService.sendPasswordResetEmail(user, resetUrl);
+  await emailService.sendPasswordResetEmail(user, resetUrl);
    return {
     ...genericResponse,
     resetUrl, 
@@ -167,4 +173,56 @@ const sendEmailVerification = async (userId) => {
     if(!user) throw ApiError.notFound('User not found')
     
     if(user.isEmailVerified) throw ApiError.badRequest('Email Already verified')
-}
+    const { rawToken } =
+    await tokenService.createEmailVerificationToken(user._id);
+    const verificationUrl =
+     `${config.app.clientUrl}/verify-email?token=${rawToken}`;
+
+    await emailService.sendVerificationEmail(user, verificationUrl);
+    
+     return {
+        message : 'Verification email sent',
+        verificationUrl
+     }
+
+    
+    };
+
+    const verifyEmail = async (rawVerificationToken) =>{
+        const tokenDoc = await tokenService.consumeEmailVerificationToken(rawVerificationToken)
+
+        const user = await userRepository.findById(tokenDoc.user)
+        if(!user) throw ApiError.badRequest("Invalid Verification Token")
+
+        if (user.isEmailVerified) {
+            return {message:'Email already verified'}
+        }
+
+        await userRepository.markEmailVerified(user._id)
+        return {message: ' Email Verified Successfully'}
+
+    };
+ 
+    const sanitizeUser =(user) =>{
+        const obj = user.toObject ? user.toObject() : { ...user };
+        delete obj.password;
+        return obj;
+    };
+
+    export default {
+         register,
+         login,
+         refresh,
+         logout,
+         logoutAll,
+         forgotPassword,
+         resetPassword,
+         sendEmailVerification,
+         verifyEmail,
+};
+
+
+
+
+
+

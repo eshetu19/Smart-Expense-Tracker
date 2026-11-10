@@ -14,12 +14,12 @@ const refreshTokenSchema=new mongoose.Schema(
             unique:true
         },
         expiresAt:{
-            type:Date,
+            type: Date,
             required:true,
-            index:true
+            
         },
         revokedAt:{
-            type:date,
+            type:Date,
             default:null
         },
         deviceName:{
@@ -43,7 +43,7 @@ const refreshTokenSchema=new mongoose.Schema(
     },
     {
         timestamps:true,
-        versionKey=false,
+        versionKey:false,
     }
 )
 

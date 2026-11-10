@@ -1,11 +1,11 @@
-import config from '../config/config.js';
+import config from '../config/index.js';
 import ApiError from '../utils/ApiError.js';
 
 
 const handleMongooseValidationError = (err) => {
   const errors=Object.values(err.errors).map((e)=>({
-    field=e.path,
-    message=e.message
+    field:e.path,
+    message:e.message
     
   }))
   return ApiError.unprocessable('Validation failed', errors);

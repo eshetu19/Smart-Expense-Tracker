@@ -1,127 +1,108 @@
+
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 
-
 const userSchema = new mongoose.Schema(
   {
-    username:{
+    username: {
       type: String,
-      required: [true, "Username is required"],
+      required: [true, 'Username is required'],
       unique: true,
-      trim:true,
-      lowercase:true,
-      minlenght: [3, "Username must be at least 3 characters long"],
-      maxlenght: [50, "Username must be at most 50 characters long"],
+      trim: true,
+      lowercase: true,
+      minlength: [3, 'Username must be at least 3 characters'],
+      maxlength: [50, 'Username must be at most 50 characters'],
       match: [
-        /^[a-Z0-9_]+$/, "username can only contain letters, numbers and underscores"]
+        /^[a-zA-Z0-9_]+$/,
+        'Username can only contain letters, numbers, and underscores',
+      ],
     },
-    email:{
+    email: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, 'Email is required'],
       unique: true,
-      trim:true,
-      lowercase:true,
-      maxlenght:255,
-      match: [/^\s+@\.\s+$/, "please provide a valid email"]
+      trim: true,
+      lowercase: true,
+      maxlength: 255,
+      match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email'],
     },
-    password:{
-      type:String,
-      required:[true,'password is required'],
-      minlength:[8,'password must be atleast 8 character'],
-      select:false
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [8, 'Password must be at least 8 characters'],
+      select: false,
     },
-    firstname:{
-      type:String,
-      required:[true,'firstname is required'],
-      trim:true,
-      maxlenght:100
+    firstName: {
+      type: String,
+      required: [true, 'First name is required'],
+      trim: true,
+      maxlength: 100,
     },
-    lastname:{
-      type:String,
-      required:[true,'lastname is required'],
-      trim:true,
-      maxlenght:100
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required'],
+      trim: true,
+      maxlength: 100,
     },
-    phoneNumber:{
-      type:String,
-      trim:true,
-      unique:true,
-      sparse:true,
-      maxlenght:20
+    phoneNumber: {
+      type: String,
+      trim: true,
+      unique: true,
+      sparse: true,
+      maxlength: 20,
     },
-    profileImage:{
-      type:String,
-      default:null,
-      maxlenght:500
+    profileImage: {
+      type: String,
+      default: null,
+      maxlength: 500,
     },
-    isEmailVerified:{
-      type:Boolean,
-      default:false
-    },
-    emailVerifiedAt:{
-      type:Date,
-      default:null
-    },
-    isActive:{
-      type:Boolean,
-      default:true
-    },
-    lastLoginAt:{
-      type:Date,
-      default:null  
-    },
-
-} ,
-{
-  timestamps:true,
-  versionKey:false,
-  toJSON: {virtuals:true},
-  toObject: {virtuals:true}
-
-}
+    isEmailVerified: { type: Boolean, default: false },
+    emailVerifiedAt: { type: Date, default: null },
+    isActive:        { type: Boolean, default: true },
+    lastLoginAt:     { type: Date, default: null },
+  },
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
-userSchema.index({isActive:1})
-userSchema.index({createdAt:-1})
 
-userSchema.virtual('fullName').get(function(){
-  return `${this.firstname} ${this.lastname}`.trim();
+userSchema.index({ isActive: 1 });
+userSchema.index({ createdAt: -1 });
+
+
+userSchema.virtual('fullName').get(function () {
+  return `${this.firstName} ${this.lastName}`.trim();
 });
 
-userSchema.virtual('initials').get(function(){
-  const first=this.firstname?.[0]??''
-  const last =this.lastname?.[0]??''
-  return(first+last).toUpperCase()
-});
 
-userSchema.methods.comparePassword = async function(candidatePassword){
-  return  bcrypt.compare(candidatePassword, this.password);
-}
+userSchema.methods.comparePassword = async function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.password);
+};
 
-userSchema.methods.markEmailVerified = function(){
+userSchema.methods.markEmailVerified = function () {
   this.isEmailVerified = true;
   this.emailVerifiedAt = new Date();
-  
-}
+};
 
-userSchema.methods.updateLastLogin = function(){
+userSchema.methods.updateLastLogin = function () {
   this.lastLoginAt = new Date();
-}
+};
 
-userSchema.statics.findByEmail =  function(email){
-  return this.findOne({email:email.toLowerCase().trim()});
-}
 
-userSchema.statics.findByUsername = function(username){
-  return this.findOne({username:username.toLowerCase().trim()});
-}
+userSchema.statics.findByEmail = function (email) {
+  return this.findOne({ email: email.toLowerCase().trim() });
+};
 
-userSchema.pre('save',async function name() {
-  if(!this.isModified('password')) return;
+
+userSchema.pre('save', async function () {
+  if (!this.isModified('password')) return;
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-})
+});
 
 const User = mongoose.model('User', userSchema);
-
 export default User;

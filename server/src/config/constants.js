@@ -18,6 +18,7 @@ export const ACCOUNT_TYPES = Object.freeze({
   OTHER:        'OTHER',
 });
 
+
 export const PERIODS = Object.freeze({
   DAILY:   'DAILY',
   WEEKLY:  'WEEKLY',
@@ -123,6 +124,13 @@ export const LIMITS = Object.freeze({
   MAX_RECURRING_PER_USER:          50,
   DEFAULT_PAGE_SIZE:               20,
   MAX_PAGE_SIZE:                   100,
+});
+
+export const REPORT_STATUSES = Object.freeze({
+  PENDING: 'PENDING',
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
 });
 
 const constants = Object.freeze({

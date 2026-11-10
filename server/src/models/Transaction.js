@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
 import {
-    TRANSACTION_TYPE,
-    TRANSACTION_STATUS,
+    TRANSACTION_STATUSES,
     DEFAULTS,
     TRANSACTION_TYPES
 } from '../config/constants.js'
@@ -65,7 +64,7 @@ const transactionSchema=new mongoose.Schema(
         },
         status: {
             type:String,
-            enum:Object.values(TRANSACTION_STATUS),
+            enum:Object.values(TRANSACTION_STATUSES),
             default:DEFAULTS.TRANSACTION_STATUS
 
         },
@@ -85,7 +84,7 @@ const transactionSchema=new mongoose.Schema(
     },
     {
         timestamps:true,
-        versionKey:true,
+        versionKey:false,
         toJSON:{virtuals:true},
         toObject:{virtuals:true}
     }
