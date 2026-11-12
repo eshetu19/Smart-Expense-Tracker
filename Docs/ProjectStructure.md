@@ -192,14 +192,6 @@ Fullstack-Expense-Tracker-App/
 
 
 
-
-
-
-
-
-
-
-
 Fullstack-Expense-Tracker-App/
 │
 ├── frontend/
@@ -212,7 +204,7 @@ Fullstack-Expense-Tracker-App/
 │   ├── src/
 │   │   │
 │   │   ├── api/                          # Axios + all API calls
-│   │   │   ├── axiosClient.js            # Base axios instance + interceptors
+│   │   │   ├── axiosClient.js            
 │   │   │   ├── auth.api.js
 │   │   │   ├── user.api.js
 │   │   │   ├── account.api.js
@@ -231,7 +223,7 @@ Fullstack-Expense-Tracker-App/
 │   │   │   └── fonts/
 │   │   │
 │   │   ├── components/                   # Reusable UI
-│   │   │   ├── common/                   # Button, Input, Modal, Loader, etc.
+│   │   │   ├── common/                   
 │   │   │   │   ├── Button.jsx
 │   │   │   │   ├── Input.jsx
 │   │   │   │   ├── Select.jsx
@@ -306,7 +298,7 @@ Fullstack-Expense-Tracker-App/
 │   │   │   │   ├── NotificationDropdown.jsx
 │   │   │   │   └── NotificationItem.jsx
 │   │   │   │
-│   │   │   ├── charts/                   # Recharts / Chart.js wrappers
+│   │   │   ├── charts/                  
 │   │   │   │   ├── PieChart.jsx
 │   │   │   │   ├── BarChart.jsx
 │   │   │   │   ├── LineChart.jsx
@@ -317,7 +309,7 @@ Fullstack-Expense-Tracker-App/
 │   │   │       ├── CategoryReport.jsx
 │   │   │       └── DateRangePicker.jsx
 │   │   │
-│   │   ├── context/                      # Global state (Context API)
+│   │   ├── context/                     
 │   │   │   ├── AuthContext.jsx
 │   │   │   ├── ThemeContext.jsx
 │   │   │   └── NotificationContext.jsx
@@ -354,23 +346,23 @@ Fullstack-Expense-Tracker-App/
 │   │   │   ├── NotFound.jsx
 │   │   │   └── ServerError.jsx
 │   │   │
-│   │   ├── routes/                       # Routing config + guards
+│   │   ├── routes/                       
 │   │   │   ├── AppRoutes.jsx
 │   │   │   ├── ProtectedRoute.jsx        # Requires auth
 │   │   │   ├── PublicRoute.jsx           # Redirects if logged in
 │   │   │   └── RoleRoute.jsx             # Requires specific role
 │   │   │
-│   │   ├── services/                     # Client-side business logic
-│   │   │   ├── auth.service.js           # login/logout/refresh
-│   │   │   ├── storage.service.js        # localStorage helpers
-│   │   │   └── export.service.js         # CSV / PDF export
+│   │   ├── services/                    
+│   │   │   ├── auth.service.js           
+│   │   │   ├── storage.service.js        
+│   │   │   └── export.service.js         
 │   │   │
-│   │   ├── store/                        # (optional) Zustand / Redux
+│   │   ├── store/         
 │   │   │   ├── authStore.js
 │   │   │   ├── transactionStore.js
 │   │   │   └── uiStore.js
 │   │   │
-│   │   ├── utils/                        # Pure helpers
+│   │   ├── utils/                        
 │   │   │   ├── formatCurrency.js
 │   │   │   ├── formatDate.js
 │   │   │   ├── validators.js
@@ -378,7 +370,7 @@ Fullstack-Expense-Tracker-App/
 │   │   │   ├── chartColors.js
 │   │   │   └── errorMessages.js
 │   │   │
-│   │   ├── styles/                       # Tailwind config + globals
+│   │   ├── styles/                       
 │   │   │   ├── index.css
 │   │   │   └── tailwind.css
 │   │   │
@@ -392,7 +384,7 @@ Fullstack-Expense-Tracker-App/
 │   ├── .prettierrc
 │   ├── .gitignore
 │   ├── index.html
-│   ├── jsconfig.json                     # for @/ path alias
+│   ├── jsconfig.json                    
 │   ├── package.json
 │   ├── vite.config.js
 │   ├── tailwind.config.js
