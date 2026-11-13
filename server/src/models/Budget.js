@@ -12,7 +12,7 @@ const budgetSchema = new mongoose.Schema(
         },
         category: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'category',
+            ref: 'Category',
             default: null
         },
         name: {

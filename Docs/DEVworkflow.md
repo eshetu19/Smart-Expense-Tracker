@@ -12,14 +12,15 @@
 # while testing
 set SAVINGS_ACCOUNT_ID=6af61a33553f2021cbcc7d8a
 set GOAL_ID=6af61abd553f2021cbcc7d93
-set CONTRIBUTION_ID=<created in M2>
+set GOAL_ID=6af61f94553f2021cbcc7df4
+set CONTRIBUTION_ID=6af6214e553f2021cbcc7e14
 set RECURRING_ID=<created in M3>
 set NOTIFICATION_ID=<created in M4>
 set REPORT_ID=<created in M5>
+set PENDING_TX_ID=6af61a33553f2021cbcc7d8a
+set TX_ID=6af61a33553f2021cbcc7d8a
 
-
-
-
+set CANCELLED_GOAL_ID=6af6238d553f2021cbcc7e50
 
 # address individual consumers , then add niche specific features
 - for companies* 
