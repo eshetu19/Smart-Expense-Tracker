@@ -6,12 +6,30 @@ import savingsGoalService from './savingsGoal.service.js';
 import ApiError from '../utils/ApiError.js';
 import {
   GOAL_STATUSES,
-  TRANSACTION_TYPES,
   TRANSACTION_STATUSES,
 } from '../config/constants.js';
 
+
+
+const revertGoalIfNeeded = async (goalId) => {
+  try {
+    const goal = await savingsGoalRepository.findById(goalId);
+    if (!goal) return;
+    if (goal.status !== GOAL_STATUSES.COMPLETED) return;
+
+    const total = await savingsContributionRepository.sumByGoal(goalId);
+
+    if (total.totalCents < goal.targetAmountCents) {
+      await savingsGoalRepository.updateStatus(goalId, GOAL_STATUSES.ACTIVE);
+    }
+  } catch (err) {
+   
+  }
+};
+
+
 const create = async (userId, data) => {
- 
+  
   const goal = await savingsGoalRepository.findByIdAndUser(
     data.savingsGoalId,
     userId
@@ -24,7 +42,7 @@ const create = async (userId, data) => {
     );
   }
 
-  
+ 
   const transaction = await transactionRepository.findByIdAndUser(
     data.transactionId,
     userId
@@ -37,13 +55,17 @@ const create = async (userId, data) => {
     );
   }
 
-   const existing =
-    await savingsContributionRepository.findByTransaction(data.transactionId);
+  
+  const existing = await savingsContributionRepository.findByTransaction(
+    data.transactionId
+  );
   if (existing) {
-    throw ApiError.conflict('This transaction is already linked to a savings goal');
+    throw ApiError.conflict(
+      'This transaction is already linked to a savings goal'
+    );
   }
 
-  
+ 
   const contribution = await savingsContributionRepository.create({
     savingsGoal: data.savingsGoalId,
     transaction: data.transactionId,
@@ -53,18 +75,18 @@ const create = async (userId, data) => {
   
   savingsGoalService
     .tryAutoComplete(data.savingsGoalId)
-    .catch(() => {
-   });
+    .catch(() => {});
 
   return contribution;
 };
 
 
 const getById = async (contributionId, userId) => {
-  const contribution = await savingsContributionRepository.findById(contributionId);
+  const contribution = await savingsContributionRepository.findById(
+    contributionId
+  );
   if (!contribution) throw ApiError.notFound('Contribution not found');
 
-  
   const goal = await savingsGoalRepository.findByIdAndUser(
     contribution.savingsGoal,
     userId
@@ -76,15 +98,15 @@ const getById = async (contributionId, userId) => {
 
 
 const listByGoal = async (goalId, userId) => {
-  
   const goal = await savingsGoalRepository.findByIdAndUser(goalId, userId);
   if (!goal) throw ApiError.notFound('Savings goal not found');
 
   return await savingsContributionRepository.findByGoal(goalId);
 };
 
+
 const getByTransaction = async (transactionId, userId) => {
-   const transaction = await transactionRepository.findByIdAndUser(
+  const transaction = await transactionRepository.findByIdAndUser(
     transactionId,
     userId
   );
@@ -93,6 +115,7 @@ const getByTransaction = async (transactionId, userId) => {
   return await savingsContributionRepository.findByTransaction(transactionId);
 };
 
+
 const getTotalForGoal = async (goalId) => {
   return await savingsContributionRepository.sumByGoal(goalId);
 };
@@ -100,17 +123,38 @@ const getTotalForGoal = async (goalId) => {
 
 const remove = async (contributionId, userId) => {
   const contribution = await getById(contributionId, userId);
+  const goalId = contribution.savingsGoal;
+
   await savingsContributionRepository.deleteById(contribution._id);
+
+  
+
+  await revertGoalIfNeeded(goalId);
+
   return { message: 'Contribution removed' };
 };
 
+
 const deleteByTransaction = async (transactionId) => {
-  return await savingsContributionRepository.deleteByTransaction(transactionId);
+  const contribution = await savingsContributionRepository.findByTransaction(
+    transactionId
+  );
+  if (!contribution) return;
+
+  const goalId = contribution.savingsGoal;
+
+  await savingsContributionRepository.deleteByTransaction(transactionId);
+
+ 
+  await revertGoalIfNeeded(goalId);
 };
+
 
 const deleteAllByGoal = async (goalId) => {
   return await savingsContributionRepository.deleteAllByGoal(goalId);
 };
+
+
 
 export default {
   create,
