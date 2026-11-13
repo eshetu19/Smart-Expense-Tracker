@@ -16,25 +16,41 @@ import {
 
 
 
+// ─────────────────────────────────────────────────────────────
+// computeEndDate — last moment of the period, in UTC
+// ─────────────────────────────────────────────────────────────
 const computeEndDate = (startDate, period) => {
   const start = new Date(startDate);
-  const end = new Date(start);
+
+  // Extract UTC components from the start date
+  const year = start.getUTCFullYear();
+  const month = start.getUTCMonth();
+  const day = start.getUTCDate();
+
+  let end;
 
   switch (period) {
     case PERIODS.DAILY:
-      end.setDate(end.getDate());
+      // Same UTC day, 23:59:59.999
+      end = new Date(Date.UTC(year, month, day, 23, 59, 59, 999));
       break;
+
     case PERIODS.WEEKLY:
-      end.setDate(end.getDate() + 6);
+      // Same UTC day + 6 days, 23:59:59.999
+      end = new Date(Date.UTC(year, month, day + 6, 23, 59, 59, 999));
       break;
+
     case PERIODS.MONTHLY:
-      end.setMonth(end.getMonth() + 1);
-      end.setDate(end.getDate() - 1);
+      // Last day of the same UTC month, 23:59:59.999
+      // Date.UTC(year, month+1, 0, ...) = day 0 of next month = last day of current
+      end = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59, 999));
       break;
+
     case PERIODS.YEARLY:
-      end.setFullYear(end.getFullYear() + 1);
-      end.setDate(end.getDate() - 1);
+      // Last day of the same UTC month next year, 23:59:59.999
+      end = new Date(Date.UTC(year + 1, month + 1, 0, 23, 59, 59, 999));
       break;
+
     default:
       throw ApiError.badRequest(`Unknown period: ${period}`);
   }
@@ -42,29 +58,33 @@ const computeEndDate = (startDate, period) => {
   return end;
 };
 
-
-
+// ─────────────────────────────────────────────────────────────
+// nextPeriodStart — first moment of the next period, in UTC
+// ─────────────────────────────────────────────────────────────
 const nextPeriodStart = (currentStart, period) => {
-  const next = new Date(currentStart);
+  const current = new Date(currentStart);
+
+  const year = current.getUTCFullYear();
+  const month = current.getUTCMonth();
+  const day = current.getUTCDate();
+
   switch (period) {
     case PERIODS.DAILY:
-      next.setDate(next.getDate() + 1);
-      break;
+      return new Date(Date.UTC(year, month, day + 1, 0, 0, 0, 0));
+
     case PERIODS.WEEKLY:
-      next.setDate(next.getDate() + 7);
-      break;
+      return new Date(Date.UTC(year, month, day + 7, 0, 0, 0, 0));
+
     case PERIODS.MONTHLY:
-      next.setMonth(next.getMonth() + 1);
-      break;
+      return new Date(Date.UTC(year, month + 1, 1, 0, 0, 0, 0));
+
     case PERIODS.YEARLY:
-      next.setFullYear(next.getFullYear() + 1);
-      break;
+      return new Date(Date.UTC(year + 1, month, 1, 0, 0, 0, 0));
+
     default:
       throw ApiError.badRequest(`Unknown period: ${period}`);
   }
-  return next;
 };
-
 
 
 const create = async (userId, data) => {

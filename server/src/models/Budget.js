@@ -64,7 +64,7 @@ const budgetSchema = new mongoose.Schema(
 
 budgetSchema.index({user:1,isActive:1})
 budgetSchema.index({category:1})
-budgetSchema.index({user:1,category:1,periods:1,startDate:1},{unique:true})
+budgetSchema.index({user:1,category:1,period:1,startDate:1},{unique:true})
 
 budgetSchema.virtual('amount').get(function(){
     return this.amountCents/100
